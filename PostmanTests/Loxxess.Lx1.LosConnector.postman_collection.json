@@ -514,7 +514,8 @@
 								"exec": [
 									"pm.test(\"Error 400\", function () {\r",
 									"    pm.response.to.have.status(400);\r",
-									"    pm.expect(pm.response.json().body[0]).to.eql(\"status must not be empty\");\r",
+									"    pm.expect(pm.response.json().body[0]).to.eql(\"status should be active or inactive\");\r",
+									"    pm.expect(pm.response.json().body[1]).to.eql(\"status must not be empty\");\r",
 									"});\r",
 									""
 								],
@@ -2145,7 +2146,7 @@
 							}
 						},
 						"url": {
-							"raw": "{{baseUrlClient}}/orders/orderlines?orderId={{ORDER_ID}}&orderLineId=1",
+							"raw": "{{baseUrlClient}}/orders/orderlines?orderId={{ORDER_ID}}&line=1",
 							"host": [
 								"{{baseUrlClient}}"
 							],
@@ -2159,7 +2160,7 @@
 									"value": "{{ORDER_ID}}"
 								},
 								{
-									"key": "orderLineId",
+									"key": "line",
 									"value": "1"
 								}
 							]
@@ -2217,7 +2218,7 @@
 							}
 						},
 						"url": {
-							"raw": "{{baseUrlClient}}/orders/orderlines?orderId={{orderId}}&orderLineId=1",
+							"raw": "{{baseUrlClient}}/orders/orderlines?orderId={{orderId}}&line=1",
 							"host": [
 								"{{baseUrlClient}}"
 							],
@@ -2231,7 +2232,7 @@
 									"value": "{{orderId}}"
 								},
 								{
-									"key": "orderLineId",
+									"key": "line",
 									"value": "1"
 								}
 							]
@@ -2283,7 +2284,7 @@
 							}
 						},
 						"url": {
-							"raw": "{{baseUrlClient}}/orders/orderlines?orderId={{ORDER_ID}}&orderLineId=20",
+							"raw": "{{baseUrlClient}}/orders/orderlines?orderId={{ORDER_ID}}&line=20",
 							"host": [
 								"{{baseUrlClient}}"
 							],
@@ -2297,7 +2298,7 @@
 									"value": "{{ORDER_ID}}"
 								},
 								{
-									"key": "orderLineId",
+									"key": "line",
 									"value": "20"
 								}
 							]
@@ -2577,7 +2578,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"box\": \r\n    {\r\n        \"handlingUnitId\": \"LOXXITone144323242\",\r\n        \"startDate\": \"2018-03-07T17:18:02\"\r\n    }\r\n}",
+							"raw": "{\r\n    \"box\": \r\n    {\r\n        \"handlingUnitId\": \"LOXXITone144323242\",\r\n        \"startDate\": \"2018-03-07T17:18:02\",\r\n        \"picklistId\": {{randomInt}}\r\n    }\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -2585,18 +2586,12 @@
 							}
 						},
 						"url": {
-							"raw": "{{baseUrlClient}}/picklistStarts?picklistId={{randomInt}}",
+							"raw": "{{baseUrlClient}}/picklistStarts",
 							"host": [
 								"{{baseUrlClient}}"
 							],
 							"path": [
 								"picklistStarts"
-							],
-							"query": [
-								{
-									"key": "picklistId",
-									"value": "{{randomInt}}"
-								}
 							]
 						}
 					},
