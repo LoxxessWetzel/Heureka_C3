@@ -19,8 +19,6 @@
 									"    pm.response.to.have.status(200);\r",
 									"});\r",
 									"\r",
-									"$articleId = pm.variables.get(\"articleId\");\r",
-									"\r",
 									"$expectedLength = pm.variables.get(\"length\");\r",
 									"$expectedHeight = pm.variables.get(\"height\");\r",
 									"$expectedWidth = pm.variables.get(\"width\");\r",
@@ -31,28 +29,14 @@
 									"$expectedStatus = pm.variables.get(\"status\");\r",
 									"$expectedCategory = pm.variables.get(\"category\");\r",
 									"\r",
-									"$expectedClientId = pm.collectionVariables.get(\"clientId\");\r",
-									"\r",
 									"const body = pm.response.json();\r",
-									"\r",
-									"pm.test(\"articleId is correct\", function () {\r",
-									"    pm.expect(body.articleId).to.eql($articleId.toString());\r",
-									"});\r",
-									" \r",
-									"pm.test(\"clientId is correct\", function () {\r",
-									"    pm.expect(body.clientId).to.eql($expectedClientId.toString());\r",
-									"});\r",
 									" \r",
 									"pm.test(\"category is correct\", function () {\r",
 									"    pm.expect(body.category).to.eql($expectedCategory);\r",
 									"});\r",
 									"\r",
-									"pm.test(\"riskClass is correct\", function () {\r",
-									"    pm.expect(body.riskClass).to.eql(\"Flammpunktklasse 1\");\r",
-									"});\r",
-									"\r",
 									"pm.test(\"dangerousGoods is correct\", function () {\r",
-									"    pm.expect(body.dangerousGoods).to.eql(true);\r",
+									"    pm.expect(body.dangerousGoods).to.eql(\"Flammpunktklasse 1\");\r",
 									"});\r",
 									"\r",
 									"pm.test(\"bulkGoods is correct\", function () {\r",
@@ -63,38 +47,37 @@
 									"    pm.expect(body.status).to.eql($expectedStatus);\r",
 									"});\r",
 									"\r",
-									"pm.test(\"unit default is PCS\", function () {\r",
-									"    pm.expect(body.unit.unit).to.eql(\"PCS\");\r",
-									"});\r",
-									"\r",
 									"pm.test(\"length is correct\", function () {\r",
-									"    pm.expect(body.unit.length).to.eql($expectedLength);\r",
+									"    pm.expect(body.length).to.eql($expectedLength);\r",
 									"});\r",
 									"\r",
 									"pm.test(\"height is correct\", function () {\r",
-									"    pm.expect(body.unit.height).to.eql($expectedHeight);\r",
+									"    pm.expect(body.height).to.eql($expectedHeight);\r",
 									"});\r",
 									"\r",
 									"pm.test(\"width is correct\", function () {\r",
-									"    pm.expect(body.unit.width).to.eql($expectedWidth);\r",
+									"    pm.expect(body.width).to.eql($expectedWidth);\r",
 									"});\r",
 									"\r",
 									"pm.test(\"weight is correct\", function () {\r",
-									"    pm.expect(body.unit.weight).to.eql($expectedWeight);\r",
+									"    pm.expect(body.weight).to.eql($expectedWeight);\r",
 									"});\r",
 									"\r",
 									"pm.test(\"piecesPerStorageBox is correct\", function () {\r",
-									"    pm.expect(body.whArticle.piecesPerStorageBox).to.eql($expectedPiecesPerStorageBox);\r",
+									"    pm.expect(body.piecesPerStorageBox).to.eql($expectedPiecesPerStorageBox);\r",
 									"});\r",
 									"\r",
 									"pm.test(\"plannedSalesPerWeek is correct\", function () {\r",
-									"    pm.expect(body.whArticle.plannedSalesPerWeek).to.eql($expectedPlannedSalesPerWeek);\r",
+									"    pm.expect(body.plannedSalesPerWeek).to.eql($expectedPlannedSalesPerWeek);\r",
 									"});\r",
 									"\r",
 									"pm.test(\"minimumIncomingAmount is correct\", function () {\r",
-									"    pm.expect(body.whArticle.minimumIncomingAmount).to.eql($expectedMinimumIncomingAmount);\r",
+									"    pm.expect(body.minimumIncomingAmount).to.eql($expectedMinimumIncomingAmount);\r",
 									"});\r",
 									"\r",
+									"pm.test(\"temperatureZone is correct\", function () {\r",
+									"    pm.expect(body.temperatureZone).to.eql(\"Z0\");\r",
+									"});\r",
 									""
 								],
 								"type": "text/javascript"
@@ -165,7 +148,7 @@
 							"listen": "test",
 							"script": {
 								"exec": [
-									"pm.test(\"Article was created\", function () {\r",
+									"pm.test(\"Article is returning\", function () {\r",
 									"    pm.response.to.have.status(200);\r",
 									"});\r",
 									"\r",
@@ -190,7 +173,7 @@
 									"});\r",
 									"\r",
 									"pm.test(\"dangerousGoods is correct\", function () {\r",
-									"    pm.expect(body.dangerousGoods).to.eql(true);\r",
+									"    pm.expect(body.dangerousGoods).to.eql(\"Flammpunktklasse 1\");\r",
 									"});\r",
 									"\r",
 									"pm.test(\"bulkGoods is correct\", function () {\r",
@@ -305,25 +288,13 @@
 									"$expectedClientId = pm.collectionVariables.get(\"clientId\");\r",
 									"\r",
 									"const body = pm.response.json();\r",
-									"\r",
-									"pm.test(\"articleId is correct\", function () {\r",
-									"    pm.expect(body.articleId).to.eql($articleId.toString());\r",
-									"});\r",
-									" \r",
-									"pm.test(\"clientId is correct\", function () {\r",
-									"    pm.expect(body.clientId).to.eql($expectedClientId.toString());\r",
-									"});\r",
 									" \r",
 									"pm.test(\"category is correct\", function () {\r",
 									"    pm.expect(body.category).to.eql($expectedCategory);\r",
 									"});\r",
 									"\r",
-									"pm.test(\"riskClass is correct\", function () {\r",
-									"    pm.expect(body.riskClass).to.eql(null);\r",
-									"});\r",
-									"\r",
 									"pm.test(\"dangerousGoods is correct\", function () {\r",
-									"    pm.expect(body.dangerousGoods).to.eql(false);\r",
+									"    pm.expect(body.dangerousGoods).to.eql(null);\r",
 									"});\r",
 									"\r",
 									"pm.test(\"bulkGoods is correct\", function () {\r",
@@ -334,36 +305,32 @@
 									"    pm.expect(body.status).to.eql($expectedStatus);\r",
 									"});\r",
 									"\r",
-									"pm.test(\"unit default is PCS\", function () {\r",
-									"    pm.expect(body.unit.unit).to.eql(\"PCS\");\r",
-									"});\r",
-									"\r",
 									"pm.test(\"length is correct\", function () {\r",
-									"    pm.expect(body.unit.length).to.eql($expectedLength);\r",
+									"    pm.expect(body.length).to.eql($expectedLength);\r",
 									"});\r",
 									"\r",
 									"pm.test(\"height is correct\", function () {\r",
-									"    pm.expect(body.unit.height).to.eql($expectedHeight);\r",
+									"    pm.expect(body.height).to.eql($expectedHeight);\r",
 									"});\r",
 									"\r",
 									"pm.test(\"width is correct\", function () {\r",
-									"    pm.expect(body.unit.width).to.eql($expectedWidth);\r",
+									"    pm.expect(body.width).to.eql($expectedWidth);\r",
 									"});\r",
 									"\r",
 									"pm.test(\"weight is correct\", function () {\r",
-									"    pm.expect(body.unit.weight).to.eql($expectedWeight);\r",
+									"    pm.expect(body.weight).to.eql($expectedWeight);\r",
 									"});\r",
 									"\r",
 									"pm.test(\"piecesPerStorageBox is correct\", function () {\r",
-									"    pm.expect(body.whArticle.piecesPerStorageBox).to.eql($expectedPiecesPerStorageBox);\r",
+									"    pm.expect(body.piecesPerStorageBox).to.eql($expectedPiecesPerStorageBox);\r",
 									"});\r",
 									"\r",
 									"pm.test(\"plannedSalesPerWeek is correct\", function () {\r",
-									"    pm.expect(body.whArticle.plannedSalesPerWeek).to.eql($expectedPlannedSalesPerWeek);\r",
+									"    pm.expect(body.plannedSalesPerWeek).to.eql($expectedPlannedSalesPerWeek);\r",
 									"});\r",
 									"\r",
 									"pm.test(\"minimumIncomingAmount is correct\", function () {\r",
-									"    pm.expect(body.whArticle.minimumIncomingAmount).to.eql($expectedMinimumIncomingAmount);\r",
+									"    pm.expect(body.minimumIncomingAmount).to.eql($expectedMinimumIncomingAmount);\r",
 									"});\r",
 									"\r",
 									""
@@ -440,13 +407,6 @@
 									"    pm.response.to.have.status(200);\r",
 									"});\r",
 									"\r",
-									"$articleId = pm.collectionVariables.get(\"ARTICLE_ID\");\r",
-									"\r",
-									"const body = pm.response.json();\r",
-									"\r",
-									"pm.test(\"articleId is correct\", function () {\r",
-									"    pm.expect(body.articleId).to.eql($articleId.toString());\r",
-									"});\r",
 									" \r",
 									""
 								],
@@ -515,7 +475,7 @@
 									"pm.test(\"Error 400\", function () {\r",
 									"    pm.response.to.have.status(400);\r",
 									"    pm.expect(pm.response.json().body[0]).to.eql(\"status should be active or inactive\");\r",
-									"    pm.expect(pm.response.json().body[1]).to.eql(\"status must not be empty\");\r",
+									"    pm.expect(pm.response.json().body[1]).to.eql(\"status must not be blank\");\r",
 									"});\r",
 									""
 								],
@@ -587,7 +547,7 @@
 								"exec": [
 									"pm.test(\"Error 400\", function () {\r",
 									"    pm.response.to.have.status(400);\r",
-									"    pm.expect(pm.response.json().body[0]).to.eql(\"category must not be empty\");\r",
+									"    pm.expect(pm.response.json().body[0]).to.eql(\"category must not be blank\");\r",
 									"});\r",
 									""
 								],
@@ -1173,6 +1133,52 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
+							"raw": "{\r\n    \"status\": \"active\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrlClient}}/handlingUnits?handlingUnitId=L0001",
+							"host": [
+								"{{baseUrlClient}}"
+							],
+							"path": [
+								"handlingUnits"
+							],
+							"query": [
+								{
+									"key": "handlingUnitId",
+									"value": "L0001"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Location - Error - Invalid Status",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Error 400\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"    pm.expect(pm.response.json().body[0]).to.eql(\"status should be active or inactive\");\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
 							"raw": "{\r\n    \"status\": \"ok\"\r\n}",
 							"options": {
 								"raw": {
@@ -1277,7 +1283,9 @@
 							"listen": "prerequest",
 							"script": {
 								"exec": [
-									""
+									"$articleId = pm.collectionVariables.get(\"ARTICLE_ID\");",
+									"",
+									"pm.variables.set(\"articleId\", $articleId);"
 								],
 								"type": "text/javascript"
 							}
@@ -1288,7 +1296,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"stocks\": [\r\n    {\r\n      \"quantity\": 10,\r\n      \"handlingUnit\": \"L0001\",\r\n      \"status\": \"ok\"\r\n    }\r\n  ]\r\n}",
+							"raw": "{\r\n  \"stocks\": [\r\n    {\r\n      \"quantity\": 10,\r\n      \"handlingUnit\": \"L0001\",\r\n      \"status\": \"ok\",\r\n      \"article\": \"{{articleId}}\"\r\n    }\r\n  ]\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1475,6 +1483,118 @@
 						"body": {
 							"mode": "raw",
 							"raw": "{\r\n  \"stocks\": [\r\n    {\r\n      \"quantity\": 10,\r\n      \"handlingUnit\": \"L0001\",\r\n      \"article\": \"{{articleId}}\",\r\n      \"status\": \"ok\"\r\n    }\r\n  ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrlClient}}/stocks?locationId=L0001",
+							"host": [
+								"{{baseUrlClient}}"
+							],
+							"path": [
+								"stocks"
+							],
+							"query": [
+								{
+									"key": "locationId",
+									"value": "L0001"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Stock - Error - Require Article When Quantity Is Positive",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Error 400\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"    pm.expect(pm.response.json().body[0]).to.eql(\"stocks[0] article must not be empty when 'quantity' is positive\");\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"stocks\": [\r\n    {\r\n      \"quantity\": 10,\r\n      \"handlingUnit\": \"L0001\",\r\n      \"status\": \"ok\"\r\n    }\r\n  ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrlClient}}/stocks?locationId=L0001",
+							"host": [
+								"{{baseUrlClient}}"
+							],
+							"path": [
+								"stocks"
+							],
+							"query": [
+								{
+									"key": "locationId",
+									"value": "L0001"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Stock - Error - Require Unit When Quantity Is Positive Copy",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Error 400\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"    pm.expect(pm.response.json().body[0]).to.eql(\"stocks[0].handlingUnit must not be blank\");\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"$articleId = pm.collectionVariables.get(\"ARTICLE_ID\");",
+									"",
+									"pm.variables.set(\"articleId\", $articleId);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"stocks\": [\r\n    {\r\n      \"quantity\": 10,\r\n      \"article\": \"{{articleId}}\",\r\n      \"status\": \"ok\"\r\n    }\r\n  ]\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1688,7 +1808,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"knownDate\": \"{{knownDate}}\",\r\n  \"loadingDeadlineDate\": \"{{loadingDeadlineDate}}\",\r\n  \"packageType\": \"{{packageType}}\",\r\n  \"priority\": {{priority}},\r\n  \"carrier\": \"A1\",\r\n  \"orderType\": \"{{orderType}}\",\r\n  \"orderlines\": {{orderLines}},\r\n  \"maxPackageWeight\": -10\r\n}",
+							"raw": "{\r\n  \"knownDate\": \"{{knownDate}}\",\r\n  \"loadingDeadlineDate\": \"{{loadingDeadlineDate}}\",\r\n  \"packageType\": \"{{packageType}}\",\r\n  \"priority\": {{priority}},\r\n  \"carrier\": \"A1\",\r\n  \"orderType\": \"{{orderType}}\",\r\n  \"orderlines\": {{orderLines}},\r\n  \"maxPackageWeight\": 0\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -2034,7 +2154,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"status\": \"ok\"\r\n}",
+							"raw": "{\r\n    \"status\": \"active\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -2079,7 +2199,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"status\": \"ok\"\r\n}",
+							"raw": "{\r\n    \"status\": \"active\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -2138,7 +2258,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"orderline\":\r\n  [\r\n    {\r\n      \"orderlineReservations\":\r\n      [\r\n        {\r\n          \"clientReservationId\": \"{{reserveId1}}\",\r\n          \"quantity\": 2.000,\r\n          \"pickLocation\": \"DLR-4-223-1-212\",\r\n          \"releaseDate\": \"2018-03-07T14:21:07\",\r\n          \"reservationDate\": \"2018-03-07T14:21:07\"\r\n        },\r\n        {\r\n          \"clientReservationId\": \"{{reserveId2}}\",\r\n          \"quantity\": 1.000,\r\n          \"pickLocation\": \"K-42-134-313-10\",\r\n          \"releaseDate\": \"2018-03-07T14:21:07\",\r\n          \"reservationDate\": \"2018-03-07T14:21:07\"\r\n        }\r\n      ]\r\n    }\r\n  ]\r\n}",
+							"raw": "{\r\n    \"orderlineReservations\":\r\n    [\r\n    {\r\n        \"clientReservationId\": \"{{reserveId1}}\",\r\n        \"quantity\": 2.000,\r\n        \"pickLocation\": \"DLR-4-223-1-212\",\r\n        \"releaseDate\": \"2018-03-07T14:21:07\",\r\n        \"reservationDate\": \"2018-03-07T14:21:07\"\r\n    },\r\n    {\r\n        \"clientReservationId\": \"{{reserveId2}}\",\r\n        \"quantity\": 1.000,\r\n        \"pickLocation\": \"K-42-134-313-10\",\r\n        \"releaseDate\": \"2018-03-07T14:21:07\",\r\n        \"reservationDate\": \"2018-03-07T14:21:07\"\r\n    }\r\n    ]\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
