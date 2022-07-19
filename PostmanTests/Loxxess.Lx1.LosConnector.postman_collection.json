@@ -2576,6 +2576,209 @@
 					"response": []
 				},
 				{
+					"name": "Order Reservations - Time In The Future",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"var uuid = require('uuid');",
+									"var moment = require('moment');",
+									"",
+									"pm.variables.set(\"now\", moment().add(10, 'minutes').toISOString());",
+									"",
+									"var reserveId1 = uuid.v4();",
+									"var reserveId2 = uuid.v4();",
+									"",
+									"pm.variables.set(\"reserveId1\", reserveId1);",
+									"pm.variables.set(\"reserveId2\", reserveId2);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"orderlineReservations\":\r\n    [\r\n    {\r\n        \"clientReservationId\": \"{{reserveId1}}\",\r\n        \"quantity\": 2.000,\r\n        \"pickLocation\": \"DLR-4-223-1-212\",\r\n        \"releaseDate\": \"2018-03-07T14:21:07\",\r\n        \"reservationDate\": \"{{now}}\"\r\n    }\r\n    ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrlClient}}/orders/orderlines?orderId={{ORDER_ID}}&line=1",
+							"host": [
+								"{{baseUrlClient}}"
+							],
+							"path": [
+								"orders",
+								"orderlines"
+							],
+							"query": [
+								{
+									"key": "orderId",
+									"value": "{{ORDER_ID}}"
+								},
+								{
+									"key": "line",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Order Reservations - Reservation Is Null",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"var uuid = require('uuid');",
+									"",
+									"var reserveId1 = uuid.v4();",
+									"var reserveId2 = uuid.v4();",
+									"",
+									"pm.variables.set(\"reserveId1\", reserveId1);",
+									"pm.variables.set(\"reserveId2\", reserveId2);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"orderlineReservations\":\r\n    [\r\n    {\r\n        \"clientReservationId\": \"{{reserveId1}}\",\r\n        \"quantity\": 2.000,\r\n        \"pickLocation\": \"DLR-4-223-1-212\",\r\n        \"releaseDate\": \"2018-03-07T14:21:07\"\r\n    }\r\n    ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrlClient}}/orders/orderlines?orderId={{ORDER_ID}}&line=1",
+							"host": [
+								"{{baseUrlClient}}"
+							],
+							"path": [
+								"orders",
+								"orderlines"
+							],
+							"query": [
+								{
+									"key": "orderId",
+									"value": "{{ORDER_ID}}"
+								},
+								{
+									"key": "line",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Order Reservations - Time Over 24h",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 400\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"\r",
+									"    pm.expect(pm.response.json().body[0]).to.eql(\"reservations[0] reservationDate is not valid, it should be less than now + 24h\");\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"var uuid = require('uuid');",
+									"var moment = require('moment');",
+									"",
+									"pm.variables.set(\"now\", moment().add(24, 'hours').add(5, 'minutes').toISOString());",
+									"",
+									"var reserveId1 = uuid.v4();",
+									"var reserveId2 = uuid.v4();",
+									"",
+									"pm.variables.set(\"reserveId1\", reserveId1);",
+									"pm.variables.set(\"reserveId2\", reserveId2);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"orderlineReservations\":\r\n    [\r\n    {\r\n        \"clientReservationId\": \"{{reserveId1}}\",\r\n        \"quantity\": 2.000,\r\n        \"pickLocation\": \"DLR-4-223-1-212\",\r\n        \"releaseDate\": \"2018-03-07T14:21:07\",\r\n        \"reservationDate\": \"{{now}}\"\r\n    }\r\n    ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrlClient}}/orders/orderlines?orderId={{ORDER_ID}}&line=1",
+							"host": [
+								"{{baseUrlClient}}"
+							],
+							"path": [
+								"orders",
+								"orderlines"
+							],
+							"query": [
+								{
+									"key": "orderId",
+									"value": "{{ORDER_ID}}"
+								},
+								{
+									"key": "line",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "Order Reservations - Error - Invalid Order",
 					"event": [
 						{
@@ -3392,6 +3595,112 @@
 							"path": [
 								"devices",
 								"bft024"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Pick",
+			"item": [
+				{
+					"name": "Pick - Start Date Less Than End Date",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 400\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"\r",
+									"    pm.expect(pm.response.json().body[0]).to.eql(\"pick pickStartDate should be less than pickEndDate\");\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"pick\": {\r\n    \"picklistId\": \"123\",\r\n    \"clientReservationId\": \"234\",\r\n    \"pickStartDate\": \"2022-07-19T02:00:00.000Z\",\r\n    \"pickEndDate\": \"2022-07-19T01:00:00.000Z\",\r\n    \"picked\": 100,\r\n    \"pickerId\": \"abc\"\r\n  }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrlClient}}/picklistPicks",
+							"host": [
+								"{{baseUrlClient}}"
+							],
+							"path": [
+								"picklistPicks"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Box - Over 24h",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 400\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"\r",
+									"    pm.expect(pm.response.json().body[0]).to.eql(\"box startDate is not valid, it should be less than now + 24h\");\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"var moment = require('moment');",
+									"pm.variables.set(\"now\", moment().add(24, 'hours').add(5, 'minutes').toISOString());"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"box\": {\r\n    \"startDate\": \"{{now}}\",\r\n    \"picklistId\": \"abc\",\r\n    \"handlingUnitId\": \"123\"\r\n  }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrlClient}}/picklistStarts",
+							"host": [
+								"{{baseUrlClient}}"
+							],
+							"path": [
+								"picklistStarts"
 							]
 						}
 					},
