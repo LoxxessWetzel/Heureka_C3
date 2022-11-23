@@ -13,7 +13,535 @@
 					"name": "High priority cases",
 					"item": [
 						{
-							"name": "3.1.1 - Call request to create article with valid request body successful (Art_1)",
+							"name": "3.1.1 - Add invalid specialPackaging",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"console.info(\"Add new Article with random articleID, lentth, width, height, weight,...\")",
+											"",
+											"pm.environment.set(\"autoArticleID\", \"autoArticleID_\".concat(_.random(20,500)))",
+											"",
+											"pm.environment.set(\"articleLength\", _.random(20,500));",
+											"pm.environment.set(\"articleWidth\", _.random(20,500));",
+											"pm.environment.set(\"articleHeight\", _.random(20,500));",
+											"pm.environment.set(\"articleWeight\", _.random(100,1000));",
+											"",
+											"pm.environment.set(\"piecesPerStorageBox\", _.random(1,500));",
+											"pm.environment.set(\"plannedSalesPerWeek\", _.random(1,200000));",
+											"pm.environment.set(\"minimumIncomingAmount\", _.random(1,1000));",
+											"",
+											"pm.environment.replaceIn('{{$randomDepartment}}');",
+											"",
+											"let statusArray = [\"active\", \"inactive\"];",
+											"pm.environment.set(\"commonStatus\", statusArray[Math.floor(Math.random() * statusArray.length)]);",
+											"",
+											"let categoryArray = [\"Lebensmittel\", \"Tier\", \"Kindertextilien\", \"Sonstiges\", \"Gefahrstoff\"];",
+											"pm.environment.set(\"articleCategory\", categoryArray[Math.floor(Math.random() * categoryArray.length)]);",
+											"",
+											"let temperatureArray = [\"Z0\", \"Z1\", \"Z2\"];",
+											"pm.environment.set(\"articleTemp\", temperatureArray[Math.floor(Math.random() * temperatureArray.length)]);",
+											"",
+											"let dangerousGoodsArray = [\"Class1\", \"Class2\", \"Class3\"];",
+											"pm.environment.set(\"dangerousGoods\", dangerousGoodsArray[Math.floor(Math.random() * dangerousGoodsArray.length)]);"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Verify the status code should be 400 Bad Request.\", function () {",
+											"    pm.response.to.have.status(400);",
+											"});",
+											"",
+											"const responsebody = pm.response.json();",
+											"",
+											"pm.test(\"Verify the error message for specialPackaging\", function () {",
+											"    pm.expect(responsebody.body[0]).to.eql(\"specialPackaging should be [none,SIOC1,SIOC2,DMAKDKA]\")",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "apiKey",
+										"value": "abc",
+										"disabled": true
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"length\": \"{{articleLength}}\",\n    \"width\": \"{{articleWidth}}\",\n    \"height\": {{articleHeight}},\n    \"weight\": {{articleWeight}},\n    \"piecesPerStorageBox\": {{piecesPerStorageBox}},\n    \"category\": \"{{articleCategory}}\",\n    \"temperatureZone\": \"{{articleTemp}}\",\n    \"dangerousGoods\": \"{{dangerousGoods}}\",\n    \"plannedSalesPerWeek\": \"{{plannedSalesPerWeek}}\",\n    \"minimumIncomingAmount\": \"{{minimumIncomingAmount}}\",\n    \"status\": \"{{commonStatus}}\",\n    \"specialPackaging\": \"abc\",\n    \"voucherArticle\": true,\n    \"fitsInStorageBox\": true,\n    \"properties\": {\n        \"1\": true,\n        \"10\": true,\n        \"unused\": true\n    }\n}"
+								},
+								"url": {
+									"raw": "{{host}}/losrestapi/clients/{{clientId}}/articles?articleId={{autoArticleID}}",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"losrestapi",
+										"clients",
+										"{{clientId}}",
+										"articles"
+									],
+									"query": [
+										{
+											"key": "articleId",
+											"value": "{{autoArticleID}}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "3.1.1 - Add invalid voucherArticle",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"console.info(\"Add new Article with random articleID, lentth, width, height, weight,...\")",
+											"",
+											"pm.environment.set(\"autoArticleID\", \"autoArticleID_\".concat(_.random(20,500)))",
+											"",
+											"pm.environment.set(\"articleLength\", _.random(20,500));",
+											"pm.environment.set(\"articleWidth\", _.random(20,500));",
+											"pm.environment.set(\"articleHeight\", _.random(20,500));",
+											"pm.environment.set(\"articleWeight\", _.random(100,1000));",
+											"",
+											"pm.environment.set(\"piecesPerStorageBox\", _.random(1,500));",
+											"pm.environment.set(\"plannedSalesPerWeek\", _.random(1,200000));",
+											"pm.environment.set(\"minimumIncomingAmount\", _.random(1,1000));",
+											"",
+											"pm.environment.replaceIn('{{$randomDepartment}}');",
+											"",
+											"let statusArray = [\"active\", \"inactive\"];",
+											"pm.environment.set(\"commonStatus\", statusArray[Math.floor(Math.random() * statusArray.length)]);",
+											"",
+											"let categoryArray = [\"Lebensmittel\", \"Tier\", \"Kindertextilien\", \"Sonstiges\", \"Gefahrstoff\"];",
+											"pm.environment.set(\"articleCategory\", categoryArray[Math.floor(Math.random() * categoryArray.length)]);",
+											"",
+											"let temperatureArray = [\"Z0\", \"Z1\", \"Z2\"];",
+											"pm.environment.set(\"articleTemp\", temperatureArray[Math.floor(Math.random() * temperatureArray.length)]);",
+											"",
+											"let dangerousGoodsArray = [\"Class1\", \"Class2\", \"Class3\"];",
+											"pm.environment.set(\"dangerousGoods\", dangerousGoodsArray[Math.floor(Math.random() * dangerousGoodsArray.length)]);"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Verify the status code should be 400 Bad Request.\", function () {",
+											"    pm.response.to.have.status(400);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "apiKey",
+										"value": "abc",
+										"disabled": true
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"length\": \"{{articleLength}}\",\n    \"width\": \"{{articleWidth}}\",\n    \"height\": {{articleHeight}},\n    \"weight\": {{articleWeight}},\n    \"piecesPerStorageBox\": {{piecesPerStorageBox}},\n    \"category\": \"{{articleCategory}}\",\n    \"temperatureZone\": \"{{articleTemp}}\",\n    \"dangerousGoods\": \"{{dangerousGoods}}\",\n    \"plannedSalesPerWeek\": \"{{plannedSalesPerWeek}}\",\n    \"minimumIncomingAmount\": \"{{minimumIncomingAmount}}\",\n    \"status\": \"{{commonStatus}}\",\n    \"specialPackaging\": \"none\",\n    \"voucherArticle\": \"aff\",\n    \"fitsInStorageBox\": true,\n    \"properties\": {\n        \"1\": true,\n        \"10\": true,\n        \"unused\": true\n    }\n}"
+								},
+								"url": {
+									"raw": "{{host}}/losrestapi/clients/{{clientId}}/articles?articleId={{autoArticleID}}",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"losrestapi",
+										"clients",
+										"{{clientId}}",
+										"articles"
+									],
+									"query": [
+										{
+											"key": "articleId",
+											"value": "{{autoArticleID}}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "3.1.1 - Add invalid fitsInStorageBox",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"console.info(\"Add new Article with random articleID, lentth, width, height, weight,...\")",
+											"",
+											"pm.environment.set(\"autoArticleID\", \"autoArticleID_\".concat(_.random(20,500)))",
+											"",
+											"pm.environment.set(\"articleLength\", _.random(20,500));",
+											"pm.environment.set(\"articleWidth\", _.random(20,500));",
+											"pm.environment.set(\"articleHeight\", _.random(20,500));",
+											"pm.environment.set(\"articleWeight\", _.random(100,1000));",
+											"",
+											"pm.environment.set(\"piecesPerStorageBox\", _.random(1,500));",
+											"pm.environment.set(\"plannedSalesPerWeek\", _.random(1,200000));",
+											"pm.environment.set(\"minimumIncomingAmount\", _.random(1,1000));",
+											"",
+											"pm.environment.replaceIn('{{$randomDepartment}}');",
+											"",
+											"let statusArray = [\"active\", \"inactive\"];",
+											"pm.environment.set(\"commonStatus\", statusArray[Math.floor(Math.random() * statusArray.length)]);",
+											"",
+											"let categoryArray = [\"Lebensmittel\", \"Tier\", \"Kindertextilien\", \"Sonstiges\", \"Gefahrstoff\"];",
+											"pm.environment.set(\"articleCategory\", categoryArray[Math.floor(Math.random() * categoryArray.length)]);",
+											"",
+											"let temperatureArray = [\"Z0\", \"Z1\", \"Z2\"];",
+											"pm.environment.set(\"articleTemp\", temperatureArray[Math.floor(Math.random() * temperatureArray.length)]);",
+											"",
+											"let dangerousGoodsArray = [\"Class1\", \"Class2\", \"Class3\"];",
+											"pm.environment.set(\"dangerousGoods\", dangerousGoodsArray[Math.floor(Math.random() * dangerousGoodsArray.length)]);"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Verify the status code should be 400 Bad Request.\", function () {",
+											"    pm.response.to.have.status(400);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "apiKey",
+										"value": "abc",
+										"disabled": true
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"length\": \"{{articleLength}}\",\n    \"width\": \"{{articleWidth}}\",\n    \"height\": {{articleHeight}},\n    \"weight\": {{articleWeight}},\n    \"piecesPerStorageBox\": {{piecesPerStorageBox}},\n    \"category\": \"{{articleCategory}}\",\n    \"temperatureZone\": \"{{articleTemp}}\",\n    \"dangerousGoods\": \"{{dangerousGoods}}\",\n    \"plannedSalesPerWeek\": \"{{plannedSalesPerWeek}}\",\n    \"minimumIncomingAmount\": \"{{minimumIncomingAmount}}\",\n    \"status\": \"{{commonStatus}}\",\n    \"specialPackaging\": \"none\",\n    \"voucherArticle\": true,\n    \"fitsInStorageBox\": \"aff\",\n    \"properties\": {\n        \"1\": true,\n        \"10\": true,\n        \"unused\": true\n    }\n}"
+								},
+								"url": {
+									"raw": "{{host}}/losrestapi/clients/{{clientId}}/articles?articleId={{autoArticleID}}",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"losrestapi",
+										"clients",
+										"{{clientId}}",
+										"articles"
+									],
+									"query": [
+										{
+											"key": "articleId",
+											"value": "{{autoArticleID}}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "3.1.1 - Add invalid properties",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"console.info(\"Add new Article with random articleID, lentth, width, height, weight,...\")",
+											"",
+											"pm.environment.set(\"autoArticleID\", \"autoArticleID_\".concat(_.random(20,500)))",
+											"",
+											"pm.environment.set(\"articleLength\", _.random(20,500));",
+											"pm.environment.set(\"articleWidth\", _.random(20,500));",
+											"pm.environment.set(\"articleHeight\", _.random(20,500));",
+											"pm.environment.set(\"articleWeight\", _.random(100,1000));",
+											"",
+											"pm.environment.set(\"piecesPerStorageBox\", _.random(1,500));",
+											"pm.environment.set(\"plannedSalesPerWeek\", _.random(1,200000));",
+											"pm.environment.set(\"minimumIncomingAmount\", _.random(1,1000));",
+											"",
+											"pm.environment.replaceIn('{{$randomDepartment}}');",
+											"",
+											"let statusArray = [\"active\", \"inactive\"];",
+											"pm.environment.set(\"commonStatus\", statusArray[Math.floor(Math.random() * statusArray.length)]);",
+											"",
+											"let categoryArray = [\"Lebensmittel\", \"Tier\", \"Kindertextilien\", \"Sonstiges\", \"Gefahrstoff\"];",
+											"pm.environment.set(\"articleCategory\", categoryArray[Math.floor(Math.random() * categoryArray.length)]);",
+											"",
+											"let temperatureArray = [\"Z0\", \"Z1\", \"Z2\"];",
+											"pm.environment.set(\"articleTemp\", temperatureArray[Math.floor(Math.random() * temperatureArray.length)]);",
+											"",
+											"let dangerousGoodsArray = [\"Class1\", \"Class2\", \"Class3\"];",
+											"pm.environment.set(\"dangerousGoods\", dangerousGoodsArray[Math.floor(Math.random() * dangerousGoodsArray.length)]);"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Verify the status code should be 400 Bad Request.\", function () {",
+											"    pm.response.to.have.status(400);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "apiKey",
+										"value": "abc",
+										"disabled": true
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"length\": \"{{articleLength}}\",\n    \"width\": \"{{articleWidth}}\",\n    \"height\": {{articleHeight}},\n    \"weight\": {{articleWeight}},\n    \"piecesPerStorageBox\": {{piecesPerStorageBox}},\n    \"category\": \"{{articleCategory}}\",\n    \"temperatureZone\": \"{{articleTemp}}\",\n    \"dangerousGoods\": \"{{dangerousGoods}}\",\n    \"plannedSalesPerWeek\": \"{{plannedSalesPerWeek}}\",\n    \"minimumIncomingAmount\": \"{{minimumIncomingAmount}}\",\n    \"status\": \"{{commonStatus}}\",\n    \"specialPackaging\": \"none\",\n    \"voucherArticle\": true,\n    \"fitsInStorageBox\": \"aff\",\n    \"properties\": []\n}"
+								},
+								"url": {
+									"raw": "{{host}}/losrestapi/clients/{{clientId}}/articles?articleId={{autoArticleID}}",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"losrestapi",
+										"clients",
+										"{{clientId}}",
+										"articles"
+									],
+									"query": [
+										{
+											"key": "articleId",
+											"value": "{{autoArticleID}}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "3.1.1 - Add invalid properties with string",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"console.info(\"Add new Article with random articleID, lentth, width, height, weight,...\")",
+											"",
+											"pm.environment.set(\"autoArticleID\", \"autoArticleID_\".concat(_.random(20,500)))",
+											"",
+											"pm.environment.set(\"articleLength\", _.random(20,500));",
+											"pm.environment.set(\"articleWidth\", _.random(20,500));",
+											"pm.environment.set(\"articleHeight\", _.random(20,500));",
+											"pm.environment.set(\"articleWeight\", _.random(100,1000));",
+											"",
+											"pm.environment.set(\"piecesPerStorageBox\", _.random(1,500));",
+											"pm.environment.set(\"plannedSalesPerWeek\", _.random(1,200000));",
+											"pm.environment.set(\"minimumIncomingAmount\", _.random(1,1000));",
+											"",
+											"pm.environment.replaceIn('{{$randomDepartment}}');",
+											"",
+											"let statusArray = [\"active\", \"inactive\"];",
+											"pm.environment.set(\"commonStatus\", statusArray[Math.floor(Math.random() * statusArray.length)]);",
+											"",
+											"let categoryArray = [\"Lebensmittel\", \"Tier\", \"Kindertextilien\", \"Sonstiges\", \"Gefahrstoff\"];",
+											"pm.environment.set(\"articleCategory\", categoryArray[Math.floor(Math.random() * categoryArray.length)]);",
+											"",
+											"let temperatureArray = [\"Z0\", \"Z1\", \"Z2\"];",
+											"pm.environment.set(\"articleTemp\", temperatureArray[Math.floor(Math.random() * temperatureArray.length)]);",
+											"",
+											"let dangerousGoodsArray = [\"Class1\", \"Class2\", \"Class3\"];",
+											"pm.environment.set(\"dangerousGoods\", dangerousGoodsArray[Math.floor(Math.random() * dangerousGoodsArray.length)]);"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Verify the status code should be 400 Bad Request.\", function () {",
+											"    pm.response.to.have.status(400);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "apiKey",
+										"value": "abc",
+										"disabled": true
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"length\": \"{{articleLength}}\",\n    \"width\": \"{{articleWidth}}\",\n    \"height\": {{articleHeight}},\n    \"weight\": {{articleWeight}},\n    \"piecesPerStorageBox\": {{piecesPerStorageBox}},\n    \"category\": \"{{articleCategory}}\",\n    \"temperatureZone\": \"{{articleTemp}}\",\n    \"dangerousGoods\": \"{{dangerousGoods}}\",\n    \"plannedSalesPerWeek\": \"{{plannedSalesPerWeek}}\",\n    \"minimumIncomingAmount\": \"{{minimumIncomingAmount}}\",\n    \"status\": \"{{commonStatus}}\",\n    \"specialPackaging\": \"none\",\n    \"voucherArticle\": true,\n    \"fitsInStorageBox\": \"aff\",\n    \"properties\": \"abc\"\n}"
+								},
+								"url": {
+									"raw": "{{host}}/losrestapi/clients/{{clientId}}/articles?articleId={{autoArticleID}}",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"losrestapi",
+										"clients",
+										"{{clientId}}",
+										"articles"
+									],
+									"query": [
+										{
+											"key": "articleId",
+											"value": "{{autoArticleID}}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "3.1.1 - Add properties is null",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"console.info(\"Add new Article with random articleID, lentth, width, height, weight,...\")",
+											"",
+											"pm.environment.set(\"autoArticleID\", \"autoArticleID_\".concat(_.random(20,500)))",
+											"",
+											"pm.environment.set(\"articleLength\", _.random(20,500));",
+											"pm.environment.set(\"articleWidth\", _.random(20,500));",
+											"pm.environment.set(\"articleHeight\", _.random(20,500));",
+											"pm.environment.set(\"articleWeight\", _.random(100,1000));",
+											"",
+											"pm.environment.set(\"piecesPerStorageBox\", _.random(1,500));",
+											"pm.environment.set(\"plannedSalesPerWeek\", _.random(1,200000));",
+											"pm.environment.set(\"minimumIncomingAmount\", _.random(1,1000));",
+											"",
+											"pm.environment.replaceIn('{{$randomDepartment}}');",
+											"",
+											"let statusArray = [\"active\", \"inactive\"];",
+											"pm.environment.set(\"commonStatus\", statusArray[Math.floor(Math.random() * statusArray.length)]);",
+											"",
+											"let categoryArray = [\"Lebensmittel\", \"Tier\", \"Kindertextilien\", \"Sonstiges\", \"Gefahrstoff\"];",
+											"pm.environment.set(\"articleCategory\", categoryArray[Math.floor(Math.random() * categoryArray.length)]);",
+											"",
+											"let temperatureArray = [\"Z0\", \"Z1\", \"Z2\"];",
+											"pm.environment.set(\"articleTemp\", temperatureArray[Math.floor(Math.random() * temperatureArray.length)]);",
+											"",
+											"let dangerousGoodsArray = [\"Class1\", \"Class2\", \"Class3\"];",
+											"pm.environment.set(\"dangerousGoods\", dangerousGoodsArray[Math.floor(Math.random() * dangerousGoodsArray.length)]);"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Verify the status code should be 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "apiKey",
+										"value": "abc",
+										"disabled": true
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"length\": \"{{articleLength}}\",\n    \"width\": \"{{articleWidth}}\",\n    \"height\": {{articleHeight}},\n    \"weight\": {{articleWeight}},\n    \"piecesPerStorageBox\": {{piecesPerStorageBox}},\n    \"category\": \"{{articleCategory}}\",\n    \"temperatureZone\": \"{{articleTemp}}\",\n    \"dangerousGoods\": \"{{dangerousGoods}}\",\n    \"plannedSalesPerWeek\": \"{{plannedSalesPerWeek}}\",\n    \"minimumIncomingAmount\": \"{{minimumIncomingAmount}}\",\n    \"status\": \"{{commonStatus}}\",\n    \"specialPackaging\": \"none\",\n    \"voucherArticle\": true,\n    \"fitsInStorageBox\": false,\n    \"properties\": null\n}"
+								},
+								"url": {
+									"raw": "{{host}}/losrestapi/clients/{{clientId}}/articles?articleId={{autoArticleID}}",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"losrestapi",
+										"clients",
+										"{{clientId}}",
+										"articles"
+									],
+									"query": [
+										{
+											"key": "articleId",
+											"value": "{{autoArticleID}}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "3.1.1 - Call request to create article with valid request body successful (Art_1) Copy",
 							"event": [
 								{
 									"listen": "prerequest",
@@ -123,6 +651,39 @@
 											"",
 											"pm.test(\"MinimumIncomingAmount is: \" + $expectedMinimumIncomingAmount, function () {",
 											"    pm.expect(responsebody.minimumIncomingAmount).to.eql($expectedMinimumIncomingAmount);",
+											"});",
+											"",
+											"pm.test(\"Default specialPackaging is none\", function () {",
+											"    pm.expect(responsebody.specialPackaging).to.eql('none');",
+											"});",
+											"",
+											"pm.test(\"Default voucherArticle is false\", function () {",
+											"    pm.expect(responsebody.voucherArticle).to.eql(false);",
+											"});",
+											"",
+											"pm.test(\"Default fitsInStorageBox is false\", function () {",
+											"    pm.expect(responsebody.fitsInStorageBox).to.eql(false);",
+											"});",
+											"",
+											"pm.test(\"Default properties are false\", function () {",
+											"    pm.expect(responsebody.properties[\"1\"]).to.eql(false);",
+											"    pm.expect(responsebody.properties[\"2\"]).to.eql(false);",
+											"    pm.expect(responsebody.properties[\"3\"]).to.eql(false);",
+											"    pm.expect(responsebody.properties[\"4\"]).to.eql(false);",
+											"    pm.expect(responsebody.properties[\"5\"]).to.eql(false);",
+											"    pm.expect(responsebody.properties[\"6\"]).to.eql(false);",
+											"    pm.expect(responsebody.properties[\"7\"]).to.eql(false);",
+											"    pm.expect(responsebody.properties[\"8\"]).to.eql(false);",
+											"    pm.expect(responsebody.properties[\"9\"]).to.eql(false);",
+											"    pm.expect(responsebody.properties[\"10\"]).to.eql(false);",
+											"    pm.expect(responsebody.properties[\"11\"]).to.eql(false);",
+											"    pm.expect(responsebody.properties[\"12\"]).to.eql(false);",
+											"    pm.expect(responsebody.properties[\"13\"]).to.eql(false);",
+											"    pm.expect(responsebody.properties[\"14\"]).to.eql(false);",
+											"    pm.expect(responsebody.properties[\"15\"]).to.eql(false);",
+											"    pm.expect(responsebody.properties[\"16\"]).to.eql(false);",
+											"    pm.expect(responsebody.properties[\"17\"]).to.eql(false);",
+											"    pm.expect(responsebody.properties[\"18\"]).to.eql(false);",
 											"});"
 										],
 										"type": "text/javascript"
@@ -145,6 +706,758 @@
 								"body": {
 									"mode": "raw",
 									"raw": "{\n    \"length\": \"{{articleLength}}\",\n    \"width\": \"{{articleWidth}}\",\n    \"height\": {{articleHeight}},\n    \"weight\": {{articleWeight}},\n    \"piecesPerStorageBox\": {{piecesPerStorageBox}},\n    \"category\": \"{{articleCategory}}\",\n    \"temperatureZone\": \"{{articleTemp}}\",\n    \"dangerousGoods\": \"{{dangerousGoods}}\",\n    \"plannedSalesPerWeek\": \"{{plannedSalesPerWeek}}\",\n    \"minimumIncomingAmount\": \"{{minimumIncomingAmount}}\",\n    \"status\": \"{{commonStatus}}\"\n}"
+								},
+								"url": {
+									"raw": "{{host}}/losrestapi/clients/{{clientId}}/articles?articleId={{autoArticleID}}",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"losrestapi",
+										"clients",
+										"{{clientId}}",
+										"articles"
+									],
+									"query": [
+										{
+											"key": "articleId",
+											"value": "{{autoArticleID}}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "3.1.1 - Add specialPackaging is NONE",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"console.info(\"Add new Article with random articleID, lentth, width, height, weight,...\")",
+											"",
+											"pm.environment.set(\"autoArticleID\", \"autoArticleID_\".concat(_.random(20,500)))",
+											"",
+											"pm.environment.set(\"articleLength\", _.random(20,500));",
+											"pm.environment.set(\"articleWidth\", _.random(20,500));",
+											"pm.environment.set(\"articleHeight\", _.random(20,500));",
+											"pm.environment.set(\"articleWeight\", _.random(100,1000));",
+											"",
+											"pm.environment.set(\"piecesPerStorageBox\", _.random(1,500));",
+											"pm.environment.set(\"plannedSalesPerWeek\", _.random(1,200000));",
+											"pm.environment.set(\"minimumIncomingAmount\", _.random(1,1000));",
+											"",
+											"pm.environment.replaceIn('{{$randomDepartment}}');",
+											"",
+											"let statusArray = [\"active\", \"inactive\"];",
+											"pm.environment.set(\"commonStatus\", statusArray[Math.floor(Math.random() * statusArray.length)]);",
+											"",
+											"let categoryArray = [\"Lebensmittel\", \"Tier\", \"Kindertextilien\", \"Sonstiges\", \"Gefahrstoff\"];",
+											"pm.environment.set(\"articleCategory\", categoryArray[Math.floor(Math.random() * categoryArray.length)]);",
+											"",
+											"let temperatureArray = [\"Z0\", \"Z1\", \"Z2\"];",
+											"pm.environment.set(\"articleTemp\", temperatureArray[Math.floor(Math.random() * temperatureArray.length)]);",
+											"",
+											"let dangerousGoodsArray = [\"Class1\", \"Class2\", \"Class3\"];",
+											"pm.environment.set(\"dangerousGoods\", dangerousGoodsArray[Math.floor(Math.random() * dangerousGoodsArray.length)]);"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Create article data was accepted.\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"$articleId = pm.environment.get(\"autoArticleID\");",
+											"",
+											"$expectedLength = pm.environment.get(\"articleLength\");",
+											"$expectedHeight = pm.environment.get(\"articleHeight\");",
+											"$expectedWidth = pm.environment.get(\"articleWidth\");",
+											"$expectedWeight = pm.environment.get(\"articleWeight\");",
+											"",
+											"$expectedCategory = pm.environment.get(\"articleCategory\");",
+											"$dangerousGoods = pm.environment.get(\"dangerousGoods\");",
+											"",
+											"$expectedPiecesPerStorageBox = pm.environment.get(\"piecesPerStorageBox\");",
+											"$expectedPlannedSalesPerWeek = pm.environment.get(\"plannedSalesPerWeek\");",
+											"$expectedMinimumIncomingAmount = pm.environment.get(\"minimumIncomingAmount\");",
+											"",
+											"$expectedStatus = pm.environment.get(\"commonStatus\");",
+											"",
+											"$clientId = pm.environment.get(\"clientId\");",
+											"",
+											"const responsebody = pm.response.json();",
+											"",
+											"// pm.test(\"Article Id is: \" + $articleId, function () {",
+											"//     pm.expect(responsebody.articleId).to.eql($articleId.toString());",
+											"// });",
+											" ",
+											"// pm.test(\"clientId is 109\", function () {",
+											"//     pm.expect(responsebody.clientId).to.eql($clientId.toString());",
+											"// });",
+											"",
+											"pm.test(\"Category is: \" + $expectedCategory, function () {",
+											"    pm.expect(responsebody.category).to.eql($expectedCategory)",
+											"});",
+											"",
+											"pm.test(\"dangerousGoods is: \" + $dangerousGoods, function () {",
+											"    pm.expect(responsebody.dangerousGoods).to.eql($dangerousGoods)",
+											"});",
+											"",
+											"pm.test(\"Length is: \" + $expectedLength, function () {",
+											"    pm.expect(responsebody.length).to.eql($expectedLength);",
+											"});",
+											"",
+											"pm.test(\"Height is: \" + $expectedHeight, function () {",
+											"    pm.expect(responsebody.height).to.eql($expectedHeight);",
+											"});",
+											"",
+											"pm.test(\"Width is: \" + $expectedWidth, function () {",
+											"    pm.expect(responsebody.width).to.eql($expectedWidth);",
+											"});",
+											"",
+											"pm.test(\"Weight is: \" + $expectedWeight, function () {",
+											"    pm.expect(responsebody.weight).to.eql($expectedWeight);",
+											"});",
+											"",
+											"pm.test(\"Status is: \" + $expectedStatus, function () {",
+											"    pm.expect(responsebody.status).to.eql($expectedStatus);",
+											"});",
+											"",
+											"pm.test(\"piecesPerStorageBox is: \" + $expectedPiecesPerStorageBox, function () {",
+											"    pm.expect(responsebody.piecesPerStorageBox).to.eql($expectedPiecesPerStorageBox);",
+											"});",
+											"",
+											"pm.test(\"PlannedSalesPerWeek is: \" + $expectedPlannedSalesPerWeek, function () {",
+											"    pm.expect(responsebody.plannedSalesPerWeek).to.eql($expectedPlannedSalesPerWeek);",
+											"});",
+											"",
+											"pm.test(\"MinimumIncomingAmount is: \" + $expectedMinimumIncomingAmount, function () {",
+											"    pm.expect(responsebody.minimumIncomingAmount).to.eql($expectedMinimumIncomingAmount);",
+											"});",
+											"",
+											"pm.test(\"Default specialPackaging is none\", function () {",
+											"    pm.expect(responsebody.specialPackaging).to.eql('none');",
+											"});",
+											"",
+											"pm.test(\"Default voucherArticle is true\", function () {",
+											"    pm.expect(responsebody.voucherArticle).to.eql(true);",
+											"});",
+											"",
+											"pm.test(\"Default fitsInStorageBox is true\", function () {",
+											"    pm.expect(responsebody.fitsInStorageBox).to.eql(true);",
+											"});",
+											"",
+											"pm.test(\"Default properties are false\", function () {",
+											"    pm.expect(responsebody.properties[\"1\"]).to.eql(true);",
+											"    pm.expect(responsebody.properties[\"2\"]).to.eql(false);",
+											"    pm.expect(responsebody.properties[\"3\"]).to.eql(false);",
+											"    pm.expect(responsebody.properties[\"4\"]).to.eql(false);",
+											"    pm.expect(responsebody.properties[\"5\"]).to.eql(false);",
+											"    pm.expect(responsebody.properties[\"6\"]).to.eql(false);",
+											"    pm.expect(responsebody.properties[\"7\"]).to.eql(false);",
+											"    pm.expect(responsebody.properties[\"8\"]).to.eql(false);",
+											"    pm.expect(responsebody.properties[\"9\"]).to.eql(false);",
+											"    pm.expect(responsebody.properties[\"10\"]).to.eql(true);",
+											"    pm.expect(responsebody.properties[\"11\"]).to.eql(false);",
+											"    pm.expect(responsebody.properties[\"12\"]).to.eql(false);",
+											"    pm.expect(responsebody.properties[\"13\"]).to.eql(false);",
+											"    pm.expect(responsebody.properties[\"14\"]).to.eql(false);",
+											"    pm.expect(responsebody.properties[\"15\"]).to.eql(false);",
+											"    pm.expect(responsebody.properties[\"16\"]).to.eql(false);",
+											"    pm.expect(responsebody.properties[\"17\"]).to.eql(false);",
+											"    pm.expect(responsebody.properties[\"18\"]).to.eql(false);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "apiKey",
+										"value": "abc",
+										"disabled": true
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"length\": \"{{articleLength}}\",\n    \"width\": \"{{articleWidth}}\",\n    \"height\": {{articleHeight}},\n    \"weight\": {{articleWeight}},\n    \"piecesPerStorageBox\": {{piecesPerStorageBox}},\n    \"category\": \"{{articleCategory}}\",\n    \"temperatureZone\": \"{{articleTemp}}\",\n    \"dangerousGoods\": \"{{dangerousGoods}}\",\n    \"plannedSalesPerWeek\": \"{{plannedSalesPerWeek}}\",\n    \"minimumIncomingAmount\": \"{{minimumIncomingAmount}}\",\n    \"status\": \"{{commonStatus}}\",\n    \"specialPackaging\": \"none\",\n    \"voucherArticle\": true,\n    \"fitsInStorageBox\": true,\n    \"properties\": {\n        \"1\": true,\n        \"10\": true,\n        \"unused\": true\n    }\n}"
+								},
+								"url": {
+									"raw": "{{host}}/losrestapi/clients/{{clientId}}/articles?articleId={{autoArticleID}}",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"losrestapi",
+										"clients",
+										"{{clientId}}",
+										"articles"
+									],
+									"query": [
+										{
+											"key": "articleId",
+											"value": "{{autoArticleID}}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "3.1.1 - Add specialPackaging is SIOC2",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"console.info(\"Add new Article with random articleID, lentth, width, height, weight,...\")",
+											"",
+											"pm.environment.set(\"autoArticleID\", \"autoArticleID_\".concat(_.random(20,500)))",
+											"",
+											"pm.environment.set(\"articleLength\", _.random(20,500));",
+											"pm.environment.set(\"articleWidth\", _.random(20,500));",
+											"pm.environment.set(\"articleHeight\", _.random(20,500));",
+											"pm.environment.set(\"articleWeight\", _.random(100,1000));",
+											"",
+											"pm.environment.set(\"piecesPerStorageBox\", _.random(1,500));",
+											"pm.environment.set(\"plannedSalesPerWeek\", _.random(1,200000));",
+											"pm.environment.set(\"minimumIncomingAmount\", _.random(1,1000));",
+											"",
+											"pm.environment.replaceIn('{{$randomDepartment}}');",
+											"",
+											"let statusArray = [\"active\", \"inactive\"];",
+											"pm.environment.set(\"commonStatus\", statusArray[Math.floor(Math.random() * statusArray.length)]);",
+											"",
+											"let categoryArray = [\"Lebensmittel\", \"Tier\", \"Kindertextilien\", \"Sonstiges\", \"Gefahrstoff\"];",
+											"pm.environment.set(\"articleCategory\", categoryArray[Math.floor(Math.random() * categoryArray.length)]);",
+											"",
+											"let temperatureArray = [\"Z0\", \"Z1\", \"Z2\"];",
+											"pm.environment.set(\"articleTemp\", temperatureArray[Math.floor(Math.random() * temperatureArray.length)]);",
+											"",
+											"let dangerousGoodsArray = [\"Class1\", \"Class2\", \"Class3\"];",
+											"pm.environment.set(\"dangerousGoods\", dangerousGoodsArray[Math.floor(Math.random() * dangerousGoodsArray.length)]);"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Create article data was accepted.\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"$articleId = pm.environment.get(\"autoArticleID\");",
+											"",
+											"$expectedLength = pm.environment.get(\"articleLength\");",
+											"$expectedHeight = pm.environment.get(\"articleHeight\");",
+											"$expectedWidth = pm.environment.get(\"articleWidth\");",
+											"$expectedWeight = pm.environment.get(\"articleWeight\");",
+											"",
+											"$expectedCategory = pm.environment.get(\"articleCategory\");",
+											"$dangerousGoods = pm.environment.get(\"dangerousGoods\");",
+											"",
+											"$expectedPiecesPerStorageBox = pm.environment.get(\"piecesPerStorageBox\");",
+											"$expectedPlannedSalesPerWeek = pm.environment.get(\"plannedSalesPerWeek\");",
+											"$expectedMinimumIncomingAmount = pm.environment.get(\"minimumIncomingAmount\");",
+											"",
+											"$expectedStatus = pm.environment.get(\"commonStatus\");",
+											"",
+											"$clientId = pm.environment.get(\"clientId\");",
+											"",
+											"const responsebody = pm.response.json();",
+											"",
+											"// pm.test(\"Article Id is: \" + $articleId, function () {",
+											"//     pm.expect(responsebody.articleId).to.eql($articleId.toString());",
+											"// });",
+											" ",
+											"// pm.test(\"clientId is 109\", function () {",
+											"//     pm.expect(responsebody.clientId).to.eql($clientId.toString());",
+											"// });",
+											"",
+											"pm.test(\"Category is: \" + $expectedCategory, function () {",
+											"    pm.expect(responsebody.category).to.eql($expectedCategory)",
+											"});",
+											"",
+											"pm.test(\"dangerousGoods is: \" + $dangerousGoods, function () {",
+											"    pm.expect(responsebody.dangerousGoods).to.eql($dangerousGoods)",
+											"});",
+											"",
+											"pm.test(\"Length is: \" + $expectedLength, function () {",
+											"    pm.expect(responsebody.length).to.eql($expectedLength);",
+											"});",
+											"",
+											"pm.test(\"Height is: \" + $expectedHeight, function () {",
+											"    pm.expect(responsebody.height).to.eql($expectedHeight);",
+											"});",
+											"",
+											"pm.test(\"Width is: \" + $expectedWidth, function () {",
+											"    pm.expect(responsebody.width).to.eql($expectedWidth);",
+											"});",
+											"",
+											"pm.test(\"Weight is: \" + $expectedWeight, function () {",
+											"    pm.expect(responsebody.weight).to.eql($expectedWeight);",
+											"});",
+											"",
+											"pm.test(\"Status is: \" + $expectedStatus, function () {",
+											"    pm.expect(responsebody.status).to.eql($expectedStatus);",
+											"});",
+											"",
+											"pm.test(\"piecesPerStorageBox is: \" + $expectedPiecesPerStorageBox, function () {",
+											"    pm.expect(responsebody.piecesPerStorageBox).to.eql($expectedPiecesPerStorageBox);",
+											"});",
+											"",
+											"pm.test(\"PlannedSalesPerWeek is: \" + $expectedPlannedSalesPerWeek, function () {",
+											"    pm.expect(responsebody.plannedSalesPerWeek).to.eql($expectedPlannedSalesPerWeek);",
+											"});",
+											"",
+											"pm.test(\"MinimumIncomingAmount is: \" + $expectedMinimumIncomingAmount, function () {",
+											"    pm.expect(responsebody.minimumIncomingAmount).to.eql($expectedMinimumIncomingAmount);",
+											"});",
+											"",
+											"pm.test(\"Default specialPackaging is SIOC2\", function () {",
+											"    pm.expect(responsebody.specialPackaging).to.eql('SIOC2');",
+											"});",
+											"",
+											"pm.test(\"Default voucherArticle is true\", function () {",
+											"    pm.expect(responsebody.voucherArticle).to.eql(true);",
+											"});",
+											"",
+											"pm.test(\"Default fitsInStorageBox is true\", function () {",
+											"    pm.expect(responsebody.fitsInStorageBox).to.eql(true);",
+											"});",
+											"",
+											"pm.test(\"Default properties are false\", function () {",
+											"    pm.expect(responsebody.properties[\"1\"]).to.eql(true);",
+											"    pm.expect(responsebody.properties[\"2\"]).to.eql(false);",
+											"    pm.expect(responsebody.properties[\"3\"]).to.eql(false);",
+											"    pm.expect(responsebody.properties[\"4\"]).to.eql(false);",
+											"    pm.expect(responsebody.properties[\"5\"]).to.eql(false);",
+											"    pm.expect(responsebody.properties[\"6\"]).to.eql(false);",
+											"    pm.expect(responsebody.properties[\"7\"]).to.eql(false);",
+											"    pm.expect(responsebody.properties[\"8\"]).to.eql(false);",
+											"    pm.expect(responsebody.properties[\"9\"]).to.eql(false);",
+											"    pm.expect(responsebody.properties[\"10\"]).to.eql(true);",
+											"    pm.expect(responsebody.properties[\"11\"]).to.eql(false);",
+											"    pm.expect(responsebody.properties[\"12\"]).to.eql(false);",
+											"    pm.expect(responsebody.properties[\"13\"]).to.eql(false);",
+											"    pm.expect(responsebody.properties[\"14\"]).to.eql(false);",
+											"    pm.expect(responsebody.properties[\"15\"]).to.eql(false);",
+											"    pm.expect(responsebody.properties[\"16\"]).to.eql(false);",
+											"    pm.expect(responsebody.properties[\"17\"]).to.eql(false);",
+											"    pm.expect(responsebody.properties[\"18\"]).to.eql(false);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "apiKey",
+										"value": "abc",
+										"disabled": true
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"length\": \"{{articleLength}}\",\n    \"width\": \"{{articleWidth}}\",\n    \"height\": {{articleHeight}},\n    \"weight\": {{articleWeight}},\n    \"piecesPerStorageBox\": {{piecesPerStorageBox}},\n    \"category\": \"{{articleCategory}}\",\n    \"temperatureZone\": \"{{articleTemp}}\",\n    \"dangerousGoods\": \"{{dangerousGoods}}\",\n    \"plannedSalesPerWeek\": \"{{plannedSalesPerWeek}}\",\n    \"minimumIncomingAmount\": \"{{minimumIncomingAmount}}\",\n    \"status\": \"{{commonStatus}}\",\n    \"specialPackaging\": \"SIOC2\",\n    \"voucherArticle\": true,\n    \"fitsInStorageBox\": true,\n    \"properties\": {\n        \"1\": true,\n        \"10\": true,\n        \"unused\": true\n    }\n}"
+								},
+								"url": {
+									"raw": "{{host}}/losrestapi/clients/{{clientId}}/articles?articleId={{autoArticleID}}",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"losrestapi",
+										"clients",
+										"{{clientId}}",
+										"articles"
+									],
+									"query": [
+										{
+											"key": "articleId",
+											"value": "{{autoArticleID}}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "3.1.1 - Add specialPackaging is DMAKDKA",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"console.info(\"Add new Article with random articleID, lentth, width, height, weight,...\")",
+											"",
+											"pm.environment.set(\"autoArticleID\", \"autoArticleID_\".concat(_.random(20,500)))",
+											"",
+											"pm.environment.set(\"articleLength\", _.random(20,500));",
+											"pm.environment.set(\"articleWidth\", _.random(20,500));",
+											"pm.environment.set(\"articleHeight\", _.random(20,500));",
+											"pm.environment.set(\"articleWeight\", _.random(100,1000));",
+											"",
+											"pm.environment.set(\"piecesPerStorageBox\", _.random(1,500));",
+											"pm.environment.set(\"plannedSalesPerWeek\", _.random(1,200000));",
+											"pm.environment.set(\"minimumIncomingAmount\", _.random(1,1000));",
+											"",
+											"pm.environment.replaceIn('{{$randomDepartment}}');",
+											"",
+											"let statusArray = [\"active\", \"inactive\"];",
+											"pm.environment.set(\"commonStatus\", statusArray[Math.floor(Math.random() * statusArray.length)]);",
+											"",
+											"let categoryArray = [\"Lebensmittel\", \"Tier\", \"Kindertextilien\", \"Sonstiges\", \"Gefahrstoff\"];",
+											"pm.environment.set(\"articleCategory\", categoryArray[Math.floor(Math.random() * categoryArray.length)]);",
+											"",
+											"let temperatureArray = [\"Z0\", \"Z1\", \"Z2\"];",
+											"pm.environment.set(\"articleTemp\", temperatureArray[Math.floor(Math.random() * temperatureArray.length)]);",
+											"",
+											"let dangerousGoodsArray = [\"Class1\", \"Class2\", \"Class3\"];",
+											"pm.environment.set(\"dangerousGoods\", dangerousGoodsArray[Math.floor(Math.random() * dangerousGoodsArray.length)]);"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Create article data was accepted.\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"$articleId = pm.environment.get(\"autoArticleID\");",
+											"",
+											"$expectedLength = pm.environment.get(\"articleLength\");",
+											"$expectedHeight = pm.environment.get(\"articleHeight\");",
+											"$expectedWidth = pm.environment.get(\"articleWidth\");",
+											"$expectedWeight = pm.environment.get(\"articleWeight\");",
+											"",
+											"$expectedCategory = pm.environment.get(\"articleCategory\");",
+											"$dangerousGoods = pm.environment.get(\"dangerousGoods\");",
+											"",
+											"$expectedPiecesPerStorageBox = pm.environment.get(\"piecesPerStorageBox\");",
+											"$expectedPlannedSalesPerWeek = pm.environment.get(\"plannedSalesPerWeek\");",
+											"$expectedMinimumIncomingAmount = pm.environment.get(\"minimumIncomingAmount\");",
+											"",
+											"$expectedStatus = pm.environment.get(\"commonStatus\");",
+											"",
+											"$clientId = pm.environment.get(\"clientId\");",
+											"",
+											"const responsebody = pm.response.json();",
+											"",
+											"// pm.test(\"Article Id is: \" + $articleId, function () {",
+											"//     pm.expect(responsebody.articleId).to.eql($articleId.toString());",
+											"// });",
+											" ",
+											"// pm.test(\"clientId is 109\", function () {",
+											"//     pm.expect(responsebody.clientId).to.eql($clientId.toString());",
+											"// });",
+											"",
+											"pm.test(\"Category is: \" + $expectedCategory, function () {",
+											"    pm.expect(responsebody.category).to.eql($expectedCategory)",
+											"});",
+											"",
+											"pm.test(\"dangerousGoods is: \" + $dangerousGoods, function () {",
+											"    pm.expect(responsebody.dangerousGoods).to.eql($dangerousGoods)",
+											"});",
+											"",
+											"pm.test(\"Length is: \" + $expectedLength, function () {",
+											"    pm.expect(responsebody.length).to.eql($expectedLength);",
+											"});",
+											"",
+											"pm.test(\"Height is: \" + $expectedHeight, function () {",
+											"    pm.expect(responsebody.height).to.eql($expectedHeight);",
+											"});",
+											"",
+											"pm.test(\"Width is: \" + $expectedWidth, function () {",
+											"    pm.expect(responsebody.width).to.eql($expectedWidth);",
+											"});",
+											"",
+											"pm.test(\"Weight is: \" + $expectedWeight, function () {",
+											"    pm.expect(responsebody.weight).to.eql($expectedWeight);",
+											"});",
+											"",
+											"pm.test(\"Status is: \" + $expectedStatus, function () {",
+											"    pm.expect(responsebody.status).to.eql($expectedStatus);",
+											"});",
+											"",
+											"pm.test(\"piecesPerStorageBox is: \" + $expectedPiecesPerStorageBox, function () {",
+											"    pm.expect(responsebody.piecesPerStorageBox).to.eql($expectedPiecesPerStorageBox);",
+											"});",
+											"",
+											"pm.test(\"PlannedSalesPerWeek is: \" + $expectedPlannedSalesPerWeek, function () {",
+											"    pm.expect(responsebody.plannedSalesPerWeek).to.eql($expectedPlannedSalesPerWeek);",
+											"});",
+											"",
+											"pm.test(\"MinimumIncomingAmount is: \" + $expectedMinimumIncomingAmount, function () {",
+											"    pm.expect(responsebody.minimumIncomingAmount).to.eql($expectedMinimumIncomingAmount);",
+											"});",
+											"",
+											"pm.test(\"Default specialPackaging is DMAKDKA\", function () {",
+											"    pm.expect(responsebody.specialPackaging).to.eql('DMAKDKA');",
+											"});",
+											"",
+											"pm.test(\"Default voucherArticle is true\", function () {",
+											"    pm.expect(responsebody.voucherArticle).to.eql(true);",
+											"});",
+											"",
+											"pm.test(\"Default fitsInStorageBox is true\", function () {",
+											"    pm.expect(responsebody.fitsInStorageBox).to.eql(true);",
+											"});",
+											"",
+											"pm.test(\"Default properties are false\", function () {",
+											"    pm.expect(responsebody.properties[\"1\"]).to.eql(true);",
+											"    pm.expect(responsebody.properties[\"2\"]).to.eql(false);",
+											"    pm.expect(responsebody.properties[\"3\"]).to.eql(false);",
+											"    pm.expect(responsebody.properties[\"4\"]).to.eql(false);",
+											"    pm.expect(responsebody.properties[\"5\"]).to.eql(false);",
+											"    pm.expect(responsebody.properties[\"6\"]).to.eql(false);",
+											"    pm.expect(responsebody.properties[\"7\"]).to.eql(false);",
+											"    pm.expect(responsebody.properties[\"8\"]).to.eql(false);",
+											"    pm.expect(responsebody.properties[\"9\"]).to.eql(false);",
+											"    pm.expect(responsebody.properties[\"10\"]).to.eql(true);",
+											"    pm.expect(responsebody.properties[\"11\"]).to.eql(false);",
+											"    pm.expect(responsebody.properties[\"12\"]).to.eql(false);",
+											"    pm.expect(responsebody.properties[\"13\"]).to.eql(false);",
+											"    pm.expect(responsebody.properties[\"14\"]).to.eql(false);",
+											"    pm.expect(responsebody.properties[\"15\"]).to.eql(false);",
+											"    pm.expect(responsebody.properties[\"16\"]).to.eql(false);",
+											"    pm.expect(responsebody.properties[\"17\"]).to.eql(false);",
+											"    pm.expect(responsebody.properties[\"18\"]).to.eql(false);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "apiKey",
+										"value": "abc",
+										"disabled": true
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"length\": \"{{articleLength}}\",\n    \"width\": \"{{articleWidth}}\",\n    \"height\": {{articleHeight}},\n    \"weight\": {{articleWeight}},\n    \"piecesPerStorageBox\": {{piecesPerStorageBox}},\n    \"category\": \"{{articleCategory}}\",\n    \"temperatureZone\": \"{{articleTemp}}\",\n    \"dangerousGoods\": \"{{dangerousGoods}}\",\n    \"plannedSalesPerWeek\": \"{{plannedSalesPerWeek}}\",\n    \"minimumIncomingAmount\": \"{{minimumIncomingAmount}}\",\n    \"status\": \"{{commonStatus}}\",\n    \"specialPackaging\": \"DMAKDKA\",\n    \"voucherArticle\": true,\n    \"fitsInStorageBox\": true,\n    \"properties\": {\n        \"1\": true,\n        \"10\": true,\n        \"unused\": true\n    }\n}"
+								},
+								"url": {
+									"raw": "{{host}}/losrestapi/clients/{{clientId}}/articles?articleId={{autoArticleID}}",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"losrestapi",
+										"clients",
+										"{{clientId}}",
+										"articles"
+									],
+									"query": [
+										{
+											"key": "articleId",
+											"value": "{{autoArticleID}}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "3.1.1 - Add specialPackaging voucherArticle fitsInStorageBox",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"console.info(\"Add new Article with random articleID, lentth, width, height, weight,...\")",
+											"",
+											"pm.environment.set(\"autoArticleID\", \"autoArticleID_\".concat(_.random(20,500)))",
+											"",
+											"pm.environment.set(\"articleLength\", _.random(20,500));",
+											"pm.environment.set(\"articleWidth\", _.random(20,500));",
+											"pm.environment.set(\"articleHeight\", _.random(20,500));",
+											"pm.environment.set(\"articleWeight\", _.random(100,1000));",
+											"",
+											"pm.environment.set(\"piecesPerStorageBox\", _.random(1,500));",
+											"pm.environment.set(\"plannedSalesPerWeek\", _.random(1,200000));",
+											"pm.environment.set(\"minimumIncomingAmount\", _.random(1,1000));",
+											"",
+											"pm.environment.replaceIn('{{$randomDepartment}}');",
+											"",
+											"let statusArray = [\"active\", \"inactive\"];",
+											"pm.environment.set(\"commonStatus\", statusArray[Math.floor(Math.random() * statusArray.length)]);",
+											"",
+											"let categoryArray = [\"Lebensmittel\", \"Tier\", \"Kindertextilien\", \"Sonstiges\", \"Gefahrstoff\"];",
+											"pm.environment.set(\"articleCategory\", categoryArray[Math.floor(Math.random() * categoryArray.length)]);",
+											"",
+											"let temperatureArray = [\"Z0\", \"Z1\", \"Z2\"];",
+											"pm.environment.set(\"articleTemp\", temperatureArray[Math.floor(Math.random() * temperatureArray.length)]);",
+											"",
+											"let dangerousGoodsArray = [\"Class1\", \"Class2\", \"Class3\"];",
+											"pm.environment.set(\"dangerousGoods\", dangerousGoodsArray[Math.floor(Math.random() * dangerousGoodsArray.length)]);"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Create article data was accepted.\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"$articleId = pm.environment.get(\"autoArticleID\");",
+											"",
+											"$expectedLength = pm.environment.get(\"articleLength\");",
+											"$expectedHeight = pm.environment.get(\"articleHeight\");",
+											"$expectedWidth = pm.environment.get(\"articleWidth\");",
+											"$expectedWeight = pm.environment.get(\"articleWeight\");",
+											"",
+											"$expectedCategory = pm.environment.get(\"articleCategory\");",
+											"$dangerousGoods = pm.environment.get(\"dangerousGoods\");",
+											"",
+											"$expectedPiecesPerStorageBox = pm.environment.get(\"piecesPerStorageBox\");",
+											"$expectedPlannedSalesPerWeek = pm.environment.get(\"plannedSalesPerWeek\");",
+											"$expectedMinimumIncomingAmount = pm.environment.get(\"minimumIncomingAmount\");",
+											"",
+											"$expectedStatus = pm.environment.get(\"commonStatus\");",
+											"",
+											"$clientId = pm.environment.get(\"clientId\");",
+											"",
+											"const responsebody = pm.response.json();",
+											"",
+											"// pm.test(\"Article Id is: \" + $articleId, function () {",
+											"//     pm.expect(responsebody.articleId).to.eql($articleId.toString());",
+											"// });",
+											" ",
+											"// pm.test(\"clientId is 109\", function () {",
+											"//     pm.expect(responsebody.clientId).to.eql($clientId.toString());",
+											"// });",
+											"",
+											"pm.test(\"Category is: \" + $expectedCategory, function () {",
+											"    pm.expect(responsebody.category).to.eql($expectedCategory)",
+											"});",
+											"",
+											"pm.test(\"dangerousGoods is: \" + $dangerousGoods, function () {",
+											"    pm.expect(responsebody.dangerousGoods).to.eql($dangerousGoods)",
+											"});",
+											"",
+											"pm.test(\"Length is: \" + $expectedLength, function () {",
+											"    pm.expect(responsebody.length).to.eql($expectedLength);",
+											"});",
+											"",
+											"pm.test(\"Height is: \" + $expectedHeight, function () {",
+											"    pm.expect(responsebody.height).to.eql($expectedHeight);",
+											"});",
+											"",
+											"pm.test(\"Width is: \" + $expectedWidth, function () {",
+											"    pm.expect(responsebody.width).to.eql($expectedWidth);",
+											"});",
+											"",
+											"pm.test(\"Weight is: \" + $expectedWeight, function () {",
+											"    pm.expect(responsebody.weight).to.eql($expectedWeight);",
+											"});",
+											"",
+											"pm.test(\"Status is: \" + $expectedStatus, function () {",
+											"    pm.expect(responsebody.status).to.eql($expectedStatus);",
+											"});",
+											"",
+											"pm.test(\"piecesPerStorageBox is: \" + $expectedPiecesPerStorageBox, function () {",
+											"    pm.expect(responsebody.piecesPerStorageBox).to.eql($expectedPiecesPerStorageBox);",
+											"});",
+											"",
+											"pm.test(\"PlannedSalesPerWeek is: \" + $expectedPlannedSalesPerWeek, function () {",
+											"    pm.expect(responsebody.plannedSalesPerWeek).to.eql($expectedPlannedSalesPerWeek);",
+											"});",
+											"",
+											"pm.test(\"MinimumIncomingAmount is: \" + $expectedMinimumIncomingAmount, function () {",
+											"    pm.expect(responsebody.minimumIncomingAmount).to.eql($expectedMinimumIncomingAmount);",
+											"});",
+											"",
+											"pm.test(\"Default specialPackaging is SIOC1\", function () {",
+											"    pm.expect(responsebody.specialPackaging).to.eql('SIOC1');",
+											"});",
+											"",
+											"pm.test(\"Default voucherArticle is true\", function () {",
+											"    pm.expect(responsebody.voucherArticle).to.eql(true);",
+											"});",
+											"",
+											"pm.test(\"Default fitsInStorageBox is true\", function () {",
+											"    pm.expect(responsebody.fitsInStorageBox).to.eql(true);",
+											"});",
+											"",
+											"pm.test(\"Default properties are false\", function () {",
+											"    pm.expect(responsebody.properties[\"1\"]).to.eql(true);",
+											"    pm.expect(responsebody.properties[\"2\"]).to.eql(false);",
+											"    pm.expect(responsebody.properties[\"3\"]).to.eql(false);",
+											"    pm.expect(responsebody.properties[\"4\"]).to.eql(false);",
+											"    pm.expect(responsebody.properties[\"5\"]).to.eql(false);",
+											"    pm.expect(responsebody.properties[\"6\"]).to.eql(false);",
+											"    pm.expect(responsebody.properties[\"7\"]).to.eql(false);",
+											"    pm.expect(responsebody.properties[\"8\"]).to.eql(false);",
+											"    pm.expect(responsebody.properties[\"9\"]).to.eql(false);",
+											"    pm.expect(responsebody.properties[\"10\"]).to.eql(true);",
+											"    pm.expect(responsebody.properties[\"11\"]).to.eql(false);",
+											"    pm.expect(responsebody.properties[\"12\"]).to.eql(false);",
+											"    pm.expect(responsebody.properties[\"13\"]).to.eql(false);",
+											"    pm.expect(responsebody.properties[\"14\"]).to.eql(false);",
+											"    pm.expect(responsebody.properties[\"15\"]).to.eql(false);",
+											"    pm.expect(responsebody.properties[\"16\"]).to.eql(false);",
+											"    pm.expect(responsebody.properties[\"17\"]).to.eql(false);",
+											"    pm.expect(responsebody.properties[\"18\"]).to.eql(false);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "apiKey",
+										"value": "abc",
+										"disabled": true
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"length\": \"{{articleLength}}\",\n    \"width\": \"{{articleWidth}}\",\n    \"height\": {{articleHeight}},\n    \"weight\": {{articleWeight}},\n    \"piecesPerStorageBox\": {{piecesPerStorageBox}},\n    \"category\": \"{{articleCategory}}\",\n    \"temperatureZone\": \"{{articleTemp}}\",\n    \"dangerousGoods\": \"{{dangerousGoods}}\",\n    \"plannedSalesPerWeek\": \"{{plannedSalesPerWeek}}\",\n    \"minimumIncomingAmount\": \"{{minimumIncomingAmount}}\",\n    \"status\": \"{{commonStatus}}\",\n    \"specialPackaging\": \"SIOC1\",\n    \"voucherArticle\": true,\n    \"fitsInStorageBox\": true,\n    \"properties\": {\n        \"1\": true,\n        \"10\": true,\n        \"unused\": true\n    }\n}"
 								},
 								"url": {
 									"raw": "{{host}}/losrestapi/clients/{{clientId}}/articles?articleId={{autoArticleID}}",
@@ -236,6 +1549,39 @@
 											"",
 											"pm.test(\"dangerousGoods is: \" + $expectedMinimumIncomingAmount, function () {",
 											"    pm.expect(responsebody.dangerousGoods).to.eql($dangerousGoods);",
+											"});",
+											"",
+											"pm.test(\"Default specialPackaging is SIOC1\", function () {",
+											"    pm.expect(responsebody.specialPackaging).to.eql('SIOC1');",
+											"});",
+											"",
+											"pm.test(\"Default voucherArticle is true\", function () {",
+											"    pm.expect(responsebody.voucherArticle).to.eql(true);",
+											"});",
+											"",
+											"pm.test(\"Default fitsInStorageBox is true\", function () {",
+											"    pm.expect(responsebody.fitsInStorageBox).to.eql(true);",
+											"});",
+											"",
+											"pm.test(\"Default properties are false\", function () {",
+											"    pm.expect(responsebody.properties[\"1\"]).to.eql(true);",
+											"    pm.expect(responsebody.properties[\"2\"]).to.eql(false);",
+											"    pm.expect(responsebody.properties[\"3\"]).to.eql(false);",
+											"    pm.expect(responsebody.properties[\"4\"]).to.eql(false);",
+											"    pm.expect(responsebody.properties[\"5\"]).to.eql(false);",
+											"    pm.expect(responsebody.properties[\"6\"]).to.eql(false);",
+											"    pm.expect(responsebody.properties[\"7\"]).to.eql(false);",
+											"    pm.expect(responsebody.properties[\"8\"]).to.eql(false);",
+											"    pm.expect(responsebody.properties[\"9\"]).to.eql(false);",
+											"    pm.expect(responsebody.properties[\"10\"]).to.eql(true);",
+											"    pm.expect(responsebody.properties[\"11\"]).to.eql(false);",
+											"    pm.expect(responsebody.properties[\"12\"]).to.eql(false);",
+											"    pm.expect(responsebody.properties[\"13\"]).to.eql(false);",
+											"    pm.expect(responsebody.properties[\"14\"]).to.eql(false);",
+											"    pm.expect(responsebody.properties[\"15\"]).to.eql(false);",
+											"    pm.expect(responsebody.properties[\"16\"]).to.eql(false);",
+											"    pm.expect(responsebody.properties[\"17\"]).to.eql(false);",
+											"    pm.expect(responsebody.properties[\"18\"]).to.eql(false);",
 											"});"
 										],
 										"type": "text/javascript"
@@ -852,7 +2198,7 @@
 			]
 		},
 		{
-			"name": "3.2 - handlingUnit controller",
+			"name": "3.2 - Handling Unit Controller",
 			"item": [
 				{
 					"name": "High priority test cases",
@@ -3337,6 +4683,62 @@
 							"response": []
 						},
 						{
+							"name": "3.5.4 - Update with release tour",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Verify Patch successfully.\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "ApiKey",
+										"value": "ourSecretApiKey"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"priority\": 2,\n  \"releaseTour\": true\n}"
+								},
+								"url": {
+									"raw": "{{host}}/losrestapi/clients/{{clientId}}/orders?orderId={{orderID}}",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"losrestapi",
+										"clients",
+										"{{clientId}}",
+										"orders"
+									],
+									"query": [
+										{
+											"key": "orderId",
+											"value": "{{orderID}}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
 							"name": "3.5.6 - Delete Order Line",
 							"event": [
 								{
@@ -3437,152 +4839,6 @@
 				{
 					"name": "Verify invalid cases",
 					"item": [
-						{
-							"name": "3.5.2(1): Verify the error response when sending request with knownDate is null",
-							"event": [
-								{
-									"listen": "prerequest",
-									"script": {
-										"exec": [
-											""
-										],
-										"type": "text/javascript"
-									}
-								},
-								{
-									"listen": "test",
-									"script": {
-										"exec": [
-											"pm.test(\"Verify error message with knowndate is null, status code 400 Bad Request.\", function () {",
-											"    pm.response.to.have.status(400);",
-											"});",
-											"",
-											"const responsebody = pm.response.json();",
-											"",
-											"let expectedErrorMessage = [\"knownDate must not be null\", \"knownDate should be in the past\"];",
-											"",
-											"pm.test(\"Verify error message when knowndate is null\", function () {",
-											"    pm.expect(responsebody.body).to.eql(expectedErrorMessage)",
-											"});"
-										],
-										"type": "text/javascript"
-									}
-								}
-							],
-							"request": {
-								"method": "PUT",
-								"header": [
-									{
-										"key": "ApiKey",
-										"value": "ourSecretApiKey"
-									},
-									{
-										"key": "Content-Type",
-										"value": "application/json"
-									},
-									{
-										"key": "Accept",
-										"value": "application/json"
-									}
-								],
-								"body": {
-									"mode": "raw",
-									"raw": "{\n  \"knownDate\": null,\n  \"shippingDeadlineDate\": \"{{shippingDeadlineDate}}\",\n  \"packageType\": \"{{packageType}}\",\n  \"orderType\": \"{{orderType}}\",\n  \"carrier\": \"{{carrier}}\",\n  \"maxPackageWeight\": 1,\n  \"loadingDeadlineDate\": \"{{loadingDeadlineDate}}\",\n  \"priority\": \"{{orderPriority}}\",\n  \"orderlines\": {{orderLine}}\n}"
-								},
-								"url": {
-									"raw": "{{host}}/losrestapi/clients/{{clientId}}/orders?orderId={{orderID}}",
-									"host": [
-										"{{host}}"
-									],
-									"path": [
-										"losrestapi",
-										"clients",
-										"{{clientId}}",
-										"orders"
-									],
-									"query": [
-										{
-											"key": "orderId",
-											"value": "{{orderID}}"
-										}
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "3.5.2(2): Verify the error response when sending request with knownDate is empty",
-							"event": [
-								{
-									"listen": "prerequest",
-									"script": {
-										"exec": [
-											""
-										],
-										"type": "text/javascript"
-									}
-								},
-								{
-									"listen": "test",
-									"script": {
-										"exec": [
-											"pm.test(\"Verify error message with knowndate is null, status code 400 Bad Request.\", function () {",
-											"    pm.response.to.have.status(400);",
-											"});",
-											"",
-											"const responsebody = pm.response.json();",
-											"",
-											"let expectedErrorMessage = [\"knownDate must not be null\", \"knownDate should be in the past\"];",
-											"",
-											"pm.test(\"Verify error message when knowndate is null\", function () {",
-											"    pm.expect(responsebody.body).to.eql(expectedErrorMessage)",
-											"});"
-										],
-										"type": "text/javascript"
-									}
-								}
-							],
-							"request": {
-								"method": "PUT",
-								"header": [
-									{
-										"key": "ApiKey",
-										"value": "ourSecretApiKey"
-									},
-									{
-										"key": "Content-Type",
-										"value": "application/json"
-									},
-									{
-										"key": "Accept",
-										"value": "application/json"
-									}
-								],
-								"body": {
-									"mode": "raw",
-									"raw": "{\n  \"knownDate\": \"\",\n  \"shippingDeadlineDate\": \"{{shippingDeadlineDate}}\",\n  \"packageType\": \"{{packageType}}\",\n  \"orderType\": \"{{orderType}}\",\n  \"carrier\": \"{{carrier}}\",\n  \"maxPackageWeight\": 1,\n  \"loadingDeadlineDate\": \"{{loadingDeadlineDate}}\",\n  \"priority\": \"{{orderPriority}}\",\n  \"orderlines\": {{orderLine}}\n}"
-								},
-								"url": {
-									"raw": "{{host}}/losrestapi/clients/{{clientId}}/orders?orderId={{orderID}}",
-									"host": [
-										"{{host}}"
-									],
-									"path": [
-										"losrestapi",
-										"clients",
-										"{{clientId}}",
-										"orders"
-									],
-									"query": [
-										{
-											"key": "orderId",
-											"value": "{{orderID}}"
-										}
-									]
-								}
-							},
-							"response": []
-						},
 						{
 							"name": "3.5.2(3): Verify the error response when sending request with orderType is null",
 							"event": [
@@ -5079,7 +6335,7 @@
 			]
 		},
 		{
-			"name": "3.12 - version-controller",
+			"name": "3.12 - Version Controller",
 			"item": [
 				{
 					"name": "3.12.1",
